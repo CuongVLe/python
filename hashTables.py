@@ -28,7 +28,6 @@ class hashTables:
   def setValue(self, key, value):
     hashValue = self.findSlot(key)
     self.resize()
-   # if not self.isFull():
     self.list[hashValue] = keyValue(key, value)
 
   def isEmpty(self, key):
@@ -39,7 +38,6 @@ class hashTables:
       return False
 
   def isFull(self):
-    print(len(self.list))
     tempList = filter(None, self.list)
     if len(tempList) >= self.tableSize:
       return True
