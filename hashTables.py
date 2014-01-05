@@ -26,8 +26,8 @@ class hashTables:
       raise Exception("Hashtable does not have key: " + key)
 
   def setValue(self, key, value):
-    hashValue = self.findSlot(key)
     self.resize()
+    hashValue = self.findSlot(key)
     self.list[hashValue] = keyValue(key, value)
 
   def isEmpty(self, key):
@@ -39,8 +39,10 @@ class hashTables:
 
   def isFull(self):
     tempList = filter(None, self.list)
-    if len(tempList) >= self.tableSize:
+    if len(tempList) >= self.tableSize - 1:
+      tempList = None
       return True
+    tempList = None
     return False
 
   def deleteValue(self, key):
@@ -51,7 +53,7 @@ class hashTables:
     while(True):
       nextHashValue = (nextHashValue+1)%self.tableSize
       if self.isEmpty(nextHashValue):
-        return
+        break
       newHashValue = abs(hash(self.list[nextHashValue].key)%self.tableSize)
       if (nextHashValue > hashValue and 
                           (newHashValue <= hashValue or
@@ -61,6 +63,8 @@ class hashTables:
                           newHashValue > nextHashValue)):
          self.list[hashValue] = self.list[nextHashValue]
          hashValue = nextHashValue
+      else:
+        break
     self.list[hashValue] = []
 
   def findSlot(self, key):
@@ -86,19 +90,22 @@ class hashTables:
         newList[hashValue] = self.list[element]
       self.tableSize = newTableSize
       self.list = list(newList)
-      newList = None
+    newList = None
+    return
 
-printHash = hashTables()
+printHash = hashTables(2)
 printHash.setValue("w", "123")
 printHash.setValue("2", "222")
 printHash.setValue("a", "333")
 printHash.setValue("q", "444")
-print(printHash.getValue("w"))
 printHash.setValue("w", "999")
+print(printHash.getValue("w"))
 printHash.deleteValue("w")
 print(printHash.getValue("2"))
 print(printHash.getValue("a"))
 print(printHash.getValue("q"))
 printHash.setValue("a", "abc")
 print(printHash.getValue("a"))
-print(printHash.getValue("z"))
+printHash.deleteValue("a")
+printHash.setValue("g", "99")
+print(printHash.getValue("g"))
